@@ -2,28 +2,18 @@ import React from 'react';
 import { Route } from 'react-router';
 
 import { connect } from 'react-redux';
-import { updateCollections } from '../../redux/shop/shop.actions';
+import { fetchCollectionsStart } from '../../redux/shop/shop.actions';
 
-import CollectionsOverview from '../../components/collections-overview/collections-overview.component';
-import CollectionPage from '../collection/collection.component';
-import WithSpinner from '../../components/with-spinner/with-spinner.component';
+import CollectionsOverviewContainer from '../../components/collections-overview/collections-overview.container';
 
-import { firestore, convertCollectionsSnapshotToMap } from '../../firebase/firebase.utils';
-
-const CollectionsOverviewWithSpinner = WithSpinner(CollectionsOverview);
-const CollectionPageWithSpinner = WithSpinner(CollectionPage);
+import CollectionPageContainer from '../../pages/collection/collection.container';
 
 class ShopPage extends React.Component {
 
-    state = {
-        isLoading: true
-    };
-
-    unsuscribeFromSnapshot = null;
-
     componentDidMount() {
-        const { updateCollections } = this.props;
-        const collectionRef = firestore.collection('collections');
+        const { fetchCollectionsStart } = this.props;
+        fetchCollectionsStart()
+        //const collectionRef = firestore.collection('collections');
 
         /* The fetch pattern most commonly used for other type of database */
 
@@ -48,16 +38,15 @@ class ShopPage extends React.Component {
         */
         /* Using the get() method*/
 
-        collectionRef.get().then(snapshot => {
+        /*collectionRef.get().then(snapshot => {
             const collectionMap = convertCollectionsSnapshotToMap(snapshot)
             updateCollections(collectionMap);
             this.setState({ isLoading: false });
-        });
+        });*/
     }
 
     render() {
         const { match } = this.props;
-        const { isLoading } = this.state;
 
         /* 
             You generally use the render prop when you need some data from the component that contains your routes, 
@@ -69,12 +58,11 @@ class ShopPage extends React.Component {
             <div className='shop-page'>
                 <Route
                     exact path={`${match.path}`}
-                    render={(props) => <CollectionsOverviewWithSpinner
-                        isLoading={isLoading} {...props} />}
+                    component={CollectionsOverviewContainer}
                 />
-                <Route path={`${match.path}/:collectionId`}
-                    render={(props) => <CollectionPageWithSpinner
-                        isLoading={isLoading} {...props} />}
+                <Route 
+                    path={`${match.path}/:collectionId`}
+                    component={CollectionPageContainer}
                 />
             </div>
         )
@@ -82,7 +70,7 @@ class ShopPage extends React.Component {
 }
 
 const mapDispatchMapsToProps = dispatch => ({
-    updateCollections: collectionsMap => dispatch(updateCollections(collectionsMap))
+    fetchCollectionsStart: () => dispatch(fetchCollectionsStart())
 });
 
 export default connect(null, mapDispatchMapsToProps)(ShopPage);

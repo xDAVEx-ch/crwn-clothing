@@ -8,11 +8,13 @@ import toggleCartHidden from '../../redux/cart/cart.actions';
 
 import CustomButton from '../custom-button/custom-button.component'
 import CartItem from '../cart-item/cart-item.component';
+//import CartDropdownContainer from './cart-dropdown.container';
 
-import {CartDropdownContainer, CartItemsContainer, EmptyMessageContainer} from './cart-dropdown.styles';
+import {CartDropdownStyledContainer, CartItemsContainer, EmptyMessageContainer} from './cart-dropdown.styles';
 
+//dispatch is a default parameter when you omitt mapDispatchToProps
 const CartDropdown = ({ cartItems, history, dispatch }) => (
-    <CartDropdownContainer>
+    <CartDropdownStyledContainer>
         <CartItemsContainer>
             {cartItems.length ? (
                 cartItems.map(cartItem => (
@@ -26,7 +28,7 @@ const CartDropdown = ({ cartItems, history, dispatch }) => (
             history.push('/checkout');
             dispatch(toggleCartHidden())
         }}> GO TO CHECKOUT</CustomButton>
-    </CartDropdownContainer>
+    </CartDropdownStyledContainer>
 );
 
 const mapStateToProps = createStructuredSelector({
@@ -34,3 +36,4 @@ const mapStateToProps = createStructuredSelector({
 });
 
 export default withRouter(connect(mapStateToProps)(CartDropdown));
+//export default CartDropdown;
