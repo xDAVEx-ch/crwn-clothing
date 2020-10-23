@@ -68,14 +68,32 @@ export const convertCollectionsSnapshotToMap = (collections) =>{
     return accumulator;
   },{});
 }
+/* Suppose that you only want to have a function run on auth changes, but only one time. 
+The simplest way to do that would be to have it run once, then unsubscribe it. */
+export const getCurrentUser = () =>{
+  return new Promise((resolve, reject) => {
+    const unsubscribe = auth.onAuthStateChanged(userAuth =>{
+      unsubscribe();
+      resolve(userAuth);
+    }, reject)
+  })
+}
+/* Means that the first time auth state changes, 
+we will log the string, then immediately unsubscribe from further changes. 
+So by calling the unsubscribe from within the function itself, 
+we are just saying, run one time, then remove yourself.
+Also, note that you can call unsubscribe at the beginning or end of the function, it doesn't matter. 
+The entire function body will execute, just like any other. 
+So calling unsubscribe won't halt the execution of the remainder of the function, or anything like that.
+https://stackoverflow.com/questions/47043188/firebase-onauthstatechanged-unsubscribe-recursion/47043249*/
 
 firebase.initializeApp(config);
 
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();
 
-const provider = new firebase.auth.GoogleAuthProvider();
-provider.setCustomParameters({ prompt: 'select_account' });
+export const googleProvider = new firebase.auth.GoogleAuthProvider();
+googleProvider.setCustomParameters({ prompt: 'select_account' });
 
-export const signInGoogle = () => auth.signInWithPopup(provider);
+export const signInGoogle = () => auth.signInWithPopup(googleProvider);
 export default firebase;
