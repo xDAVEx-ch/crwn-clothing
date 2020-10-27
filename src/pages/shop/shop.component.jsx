@@ -7,12 +7,14 @@ import { fetchCollectionsStart } from '../../redux/shop/shop.actions';
 import CollectionsOverviewContainer from '../../components/collections-overview/collections-overview.container';
 
 import CollectionPageContainer from '../../pages/collection/collection.container';
+import { useEffect } from 'react';
 
-class ShopPage extends React.Component {
+const ShopPage = ({ match, fetchCollectionsStart }) => {
 
-    componentDidMount() {
-        const { fetchCollectionsStart } = this.props;
+    useEffect(() =>{
         fetchCollectionsStart()
+    }, [fetchCollectionsStart]);
+        
         //const collectionRef = firestore.collection('collections');
 
         /* The fetch pattern most commonly used for other type of database */
@@ -43,30 +45,25 @@ class ShopPage extends React.Component {
             updateCollections(collectionMap);
             this.setState({ isLoading: false });
         });*/
-    }
 
-    render() {
-        const { match } = this.props;
+    /* 
+        You generally use the render prop when you need some data from the component that contains your routes, 
+        since the component prop gives no real way of passing in additional props to the component.
+        https://stackoverflow.com/questions/51226685/reactjs-component-vs-render-in-route
+    */
 
-        /* 
-            You generally use the render prop when you need some data from the component that contains your routes, 
-            since the component prop gives no real way of passing in additional props to the component.
-            https://stackoverflow.com/questions/51226685/reactjs-component-vs-render-in-route
-        */
-
-        return (
-            <div className='shop-page'>
-                <Route
-                    exact path={`${match.path}`}
-                    component={CollectionsOverviewContainer}
-                />
-                <Route 
-                    path={`${match.path}/:collectionId`}
-                    component={CollectionPageContainer}
-                />
-            </div>
-        )
-    }
+    return (
+        <div className='shop-page'>
+            <Route
+                exact path={`${match.path}`}
+                component={CollectionsOverviewContainer}
+            />
+            <Route
+                path={`${match.path}/:collectionId`}
+                component={CollectionPageContainer}
+            />
+        </div>
+    )
 }
 
 const mapDispatchMapsToProps = dispatch => ({
