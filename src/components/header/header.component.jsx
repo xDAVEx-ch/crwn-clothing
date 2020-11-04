@@ -1,6 +1,7 @@
 import React, {useContext} from 'react';
 
 import { HeaderContainer, LogoContainer, OptionsContainer, OptionLink } from './header.styles';
+
 import { ReactComponent as Logo } from '../../assets/4.3 crown.svg.svg';
 import CartIcon from '../cart-icon/cart-icon.component';
 import CartDropdown from '../cart-dropdown/cart-dropdown.component';
