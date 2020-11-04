@@ -1,45 +1,41 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import React, {useContext} from 'react';
 
-import { createStructuredSelector} from 'reselect';
-import { selectCartHidden } from '../../redux/cart/cart.selectors';
-import { selectCurrentUser } from '../../redux/user/user.selectors';
-import { signOutStart } from '../../redux/user/user.actions'
+import { HeaderContainer, LogoContainer, OptionsContainer, OptionLink } from './header.styles';
 
-import { HeaderContainer, LogoContainer, OptionsContainer, OptionLink} from './header.styles';
 import { ReactComponent as Logo } from '../../assets/4.3 crown.svg.svg';
 import CartIcon from '../cart-icon/cart-icon.component';
 import CartDropdown from '../cart-dropdown/cart-dropdown.component';
 
+import CurrentUserContext from "../../contexts/user/current-user.context";
 
-const Header = ({ currentUser, hidden, signOutStart }) => (
-    <HeaderContainer>
-        <LogoContainer to='/'>
-            <Logo className='logo'></Logo>
-        </LogoContainer>
+import {CartContext} from '../../providers/cart/cart.provider';
 
-        <OptionsContainer>
-            <OptionLink to='/shop'>SHOP</OptionLink>
-            <OptionLink to='/contact'>CONTACT</OptionLink>
-            {
-                currentUser ?
-                    (<OptionLink as='div' onClick={() => signOutStart()}>SIGN OUT</OptionLink>)
-                    :
-                    (<OptionLink to='/signin'>SIGN IN</OptionLink>)
-            }
-            <CartIcon></CartIcon>
-        </OptionsContainer>
-        {hidden ? null : <CartDropdown></CartDropdown>}
-    </HeaderContainer>
-);
+import { auth } from '../../firebase/firebase.utils';
 
-const mapStateToProps = createStructuredSelector({
-    currentUser: selectCurrentUser,
-    hidden: selectCartHidden
-});
+const Header = () => {
+    const currentUser = useContext(CurrentUserContext);
+    const {hidden} = useContext(CartContext);
 
-const mapDispatchToProps = dispatch =>({
-    signOutStart: () => dispatch(signOutStart())
-});
+    return (
+        <HeaderContainer>
+            <LogoContainer to='/'>
+                <Logo className='logo'></Logo>
+            </LogoContainer>
 
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
+            <OptionsContainer>
+                <OptionLink to='/shop'>SHOP</OptionLink>
+                <OptionLink to='/contact'>CONTACT</OptionLink>
+                {
+                    currentUser ?
+                        (<OptionLink as='div' onClick={() => auth.signOut()}>SIGN OUT</OptionLink>)
+                        :
+                        (<OptionLink to='/signin'>SIGN IN</OptionLink>)
+                }
+                <CartIcon></CartIcon>
+            </OptionsContainer>
+            {hidden ? null : <CartDropdown></CartDropdown>}
+        </HeaderContainer>
+    )
+};
+
+export default Header;
