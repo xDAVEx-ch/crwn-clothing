@@ -8,19 +8,23 @@ import { PersistGate } from 'redux-persist/integration/react';
 
 import { store, persistor } from './redux/store.redux';
 
+import CartProvider from './providers/cart/cart.provider';
+
 import './index.css';
 import App from './App';
 
 ReactDOM.render(
-  <Provider store={store}>
-    <BrowserRouter>
-      <PersistGate persistor={persistor}>
-        <React.StrictMode>
-          <App />
-        </React.StrictMode>
-      </PersistGate>
-    </BrowserRouter>
-  </Provider>
+  <CartProvider>
+    <Provider store={store}>
+      <BrowserRouter>
+        <PersistGate persistor={persistor}>
+          <React.StrictMode>
+            <App />
+          </React.StrictMode>
+        </PersistGate>
+      </BrowserRouter>
+    </Provider>
+  </CartProvider>
   ,
   document.getElementById('root')
 );
