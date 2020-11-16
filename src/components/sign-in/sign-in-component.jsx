@@ -48,7 +48,7 @@ const SignIn = ({ emailSignInStart, googleSignInStart }) => {
 
                 <div className='buttons'>
                     <CustomButton type="submit">Sign in</CustomButton>
-                    <CustomButton type="button" onClick={googleSignInStart} isGoogleSignIn>Sign in using Google</CustomButton>
+                    <CustomButton type="button" onClick={googleSignInStart} isGoogleSignIn>Using Google</CustomButton>
                 </div>
 
 
