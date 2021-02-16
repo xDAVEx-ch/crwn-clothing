@@ -3,6 +3,7 @@ import styled, {css} from 'styled-components';
 const buttonStyles = css`
     background-color: black;
     color: white;
+    max-width: 200px;
 
     &:hover {
         background-color: white;
