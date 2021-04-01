@@ -23,3 +23,6 @@ export const ItemCountContainer = styled.span`
     font-weight: bold;
     bottom: 12px;
 `;
+
+CartIconContainer.displayName = 'CartIconContainer';
+ItemCountContainer.displayName = 'ItemCountContainer';

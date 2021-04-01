@@ -23,3 +23,6 @@ export const ItemsDetailsContainer = styled.div`
 export const DetailContainer = styled.span`
     font-size: 16px;
 `;
+
+DetailContainer.displayName = 'DetailContainer';
+ImgContainer.displayName = 'ImgContainer';
